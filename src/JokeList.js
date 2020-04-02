@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import uuid from 'uuid/v4';
 import Joke from './Joke';
 import './JokeList.css';
 
@@ -12,6 +13,7 @@ class JokeList extends Component {
     jokes: JSON.parse(window.localStorage.getItem('jokes') || '[]'),
     loading: false
   };
+  seenJokes = new Set(this.state.jokes.map(j => j.jokes));
 
   componentDidMount = () => {
     if (this.state.jokes.length === 0) {
@@ -25,7 +27,14 @@ class JokeList extends Component {
       const res = await axios.get('https://icanhazdadjoke.com/', {
         headers: { Accept: 'application/json' }
       });
-      jokes.push({ joke: res.data.joke, votes: 0, id: res.data.id });
+
+      const newJoke = res.data.joke;
+
+      if (!this.seenJokes.has(newJoke)) {
+        jokes.push({ joke: newJoke, votes: 0, id: uuid() });
+      } else {
+        console.log('found Duplicate');
+      }
     }
 
     this.setState(
