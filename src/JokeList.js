@@ -22,30 +22,35 @@ class JokeList extends Component {
   };
 
   getJokes = async () => {
-    let jokes = [];
-    while (jokes.length < this.props.numJokesToGet) {
-      const res = await axios.get('https://icanhazdadjoke.com/', {
-        headers: { Accept: 'application/json' }
-      });
+    try {
+      let jokes = [];
+      while (jokes.length < this.props.numJokesToGet) {
+        const res = await axios.get('https://icanhazdadjoke.com/', {
+          headers: { Accept: 'application/json' }
+        });
 
-      const newJoke = res.data.joke;
+        const newJoke = res.data.joke;
 
-      if (!this.seenJokes.has(newJoke)) {
-        jokes.push({ joke: newJoke, votes: 0, id: uuid() });
-      } else {
-        console.log('found Duplicate');
+        if (!this.seenJokes.has(newJoke)) {
+          jokes.push({ joke: newJoke, votes: 0, id: uuid() });
+        } else {
+          console.log('found Duplicate');
+        }
       }
+
+      this.setState(
+        st => ({
+          loading: false,
+          jokes: [...st.jokes, ...jokes]
+        }),
+        () => {
+          window.localStorage.setItem('jokes', JSON.stringify(this.state.jokes));
+        }
+      );
+    } catch (error) {
+      alert(error.message);
+      this.setState({ loading: false });
     }
-
-    this.setState(
-      st => ({
-        loading: false,
-        jokes: [...st.jokes, ...jokes]
-      }),
-      () => {
-        window.localStorage.setItem('jokes', JSON.stringify(this.state.jokes));
-      }
-    );
   };
 
   handleVote = (id, delta) => {
