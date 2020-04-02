@@ -1,8 +1,16 @@
 .App {
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  font-family: 'Comic Neue', cursive;
+  background: -webkit-linear-gradient(70deg, #ffb4b4 40%, #90dcff 40%);
+  background: -o-linear-gradient(70deg, #ffb4b4 40%, #90dcff 40%);
+  background: -moz-linear-gradient(70deg, #ffb4b4 40%, #90dcff 40%);
+  background: linear-gradient(70deg, #ffb4b4 40%, #90dcff 40%);
 }
 
-.App-logo {
+/* .App-logo {
   height: 40vmin;
   pointer-events: none;
 }
@@ -35,4 +43,4 @@
   to {
     transform: rotate(360deg);
   }
-}
+} */
